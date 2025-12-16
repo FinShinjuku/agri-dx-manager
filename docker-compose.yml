@@ -1,0 +1,59 @@
+version: "3.8"
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:16-alpine
+    container_name: sprout-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: sprout
+      POSTGRES_PASSWORD: sprout_password_2024
+      POSTGRES_DB: sprout_dx
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sprout -d sprout_dx"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Next.js Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sprout-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://sprout:sprout_password_2024@db:5432/sprout_dx?schema=public
+      - NODE_ENV=production
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # Prisma Studio (Development only)
+  prisma-studio:
+    image: node:20-alpine
+    container_name: sprout-prisma-studio
+    working_dir: /app
+    profiles:
+      - dev
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "5555:5555"
+    environment:
+      - DATABASE_URL=postgresql://sprout:sprout_password_2024@db:5432/sprout_dx?schema=public
+    command: npx prisma studio --port 5555
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

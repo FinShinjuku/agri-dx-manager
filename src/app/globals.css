@@ -1,26 +1,578 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ========================================
+   Jony Ive / Steve Jobs Design System
+   Minimal, Elegant, Timeless
+   ======================================== */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+:root {
+  /* Primary Colors - Agricultural Green + Apple Neutrals */
+  --agri-green-50: #f0fdf4;
+  --agri-green-100: #dcfce7;
+  --agri-green-200: #bbf7d0;
+  --agri-green-300: #86efac;
+  --agri-green-400: #4ade80;
+  --agri-green-500: #22c55e;
+  --agri-green-600: #16a34a;
+  --agri-green-700: #15803d;
+  --agri-green-800: #166534;
+  --agri-green-900: #14532d;
+  --agri-green-950: #052e16;
+
+  /* Apple-inspired Neutrals */
+  --apple-gray-50: #fafafa;
+  --apple-gray-100: #f5f5f5;
+  --apple-gray-200: #e5e5e5;
+  --apple-gray-300: #d4d4d4;
+  --apple-gray-400: #a3a3a3;
+  --apple-gray-500: #737373;
+  --apple-gray-600: #525252;
+  --apple-gray-700: #404040;
+  --apple-gray-800: #262626;
+  --apple-gray-900: #171717;
+  --apple-gray-950: #0a0a0a;
+
+  /* shadcn/ui Variables */
+  --background: 0 0% 100%;
+  --foreground: 0 0% 3.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 3.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 3.9%;
+  --primary: 142 76% 36%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 0 0% 96.1%;
+  --secondary-foreground: 0 0% 9%;
+  --muted: 0 0% 96.1%;
+  --muted-foreground: 0 0% 45.1%;
+  --accent: 0 0% 96.1%;
+  --accent-foreground: 0 0% 9%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 89.8%;
+  --input: 0 0% 89.8%;
+  --ring: 142 76% 36%;
+  --chart-1: 12 76% 61%;
+  --chart-2: 173 58% 39%;
+  --chart-3: 197 37% 24%;
+  --chart-4: 43 74% 66%;
+  --chart-5: 27 87% 67%;
+  --radius: 0.5rem;
+
+  /* Custom Semantic Colors */
+  --surface: #fafafa;
+  --surface-elevated: #ffffff;
+  --border-hover: #d4d4d4;
+  --accent-color: var(--agri-green-600);
+  --accent-hover: var(--agri-green-700);
+  --accent-light: var(--agri-green-50);
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'YuGothic', 'Meiryo', sans-serif;
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Spacing - Apple's golden ratio inspired */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+
+  /* Border Radius - Subtle curves */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+
+  /* Shadows - Soft and refined */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+
+  /* Glassmorphism */
+  --glass-background: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+
+  /* Animation Timing */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 350ms;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 142 71% 45%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 142 71% 45%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --surface: #171717;
+    --surface-elevated: #262626;
+    --border-hover: #525252;
+    --accent-color: var(--agri-green-500);
+    --accent-hover: var(--agri-green-400);
+    --accent-light: var(--agri-green-950);
+    --glass-background: rgba(23, 23, 23, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
   }
 }
 
+/* ========================================
+   Tailwind Theme Configuration
+   ======================================== */
+
+@theme inline {
+  /* shadcn/ui Colors */
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+
+  /* Custom Colors */
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-border-hover: var(--border-hover);
+  --color-accent-color: var(--accent-color);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-light: var(--accent-light);
+
+  /* Agricultural Green Palette */
+  --color-agri-green-50: var(--agri-green-50);
+  --color-agri-green-100: var(--agri-green-100);
+  --color-agri-green-200: var(--agri-green-200);
+  --color-agri-green-300: var(--agri-green-300);
+  --color-agri-green-400: var(--agri-green-400);
+  --color-agri-green-500: var(--agri-green-500);
+  --color-agri-green-600: var(--agri-green-600);
+  --color-agri-green-700: var(--agri-green-700);
+  --color-agri-green-800: var(--agri-green-800);
+  --color-agri-green-900: var(--agri-green-900);
+  --color-agri-green-950: var(--agri-green-950);
+
+  /* Apple Gray Palette */
+  --color-apple-gray-50: var(--apple-gray-50);
+  --color-apple-gray-100: var(--apple-gray-100);
+  --color-apple-gray-200: var(--apple-gray-200);
+  --color-apple-gray-300: var(--apple-gray-300);
+  --color-apple-gray-400: var(--apple-gray-400);
+  --color-apple-gray-500: var(--apple-gray-500);
+  --color-apple-gray-600: var(--apple-gray-600);
+  --color-apple-gray-700: var(--apple-gray-700);
+  --color-apple-gray-800: var(--apple-gray-800);
+  --color-apple-gray-900: var(--apple-gray-900);
+  --color-apple-gray-950: var(--apple-gray-950);
+
+  /* Typography */
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+
+  /* Spacing */
+  --spacing-xs: var(--spacing-xs);
+  --spacing-sm: var(--spacing-sm);
+  --spacing-md: var(--spacing-md);
+  --spacing-lg: var(--spacing-lg);
+  --spacing-xl: var(--spacing-xl);
+  --spacing-2xl: var(--spacing-2xl);
+  --spacing-3xl: var(--spacing-3xl);
+
+  /* Border Radius */
+  --radius: var(--radius);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-2xl: var(--radius-2xl);
+
+  /* Shadows */
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-2xl: var(--shadow-2xl);
+  --shadow-inner: var(--shadow-inner);
+
+  /* Animation */
+  --transition-timing-function-ease-out-expo: var(--ease-out-expo);
+  --transition-timing-function-smooth: var(--ease-in-out-smooth);
+  --transition-duration-fast: var(--duration-fast);
+  --transition-duration-normal: var(--duration-normal);
+  --transition-duration-slow: var(--duration-slow);
+
+  /* Animation Keyframes */
+  --animate-fadeIn: fadeIn var(--duration-slow) var(--ease-out-expo);
+  --animate-slideUp: slideUp var(--duration-slow) var(--ease-out-expo);
+  --animate-slideDown: slideDown var(--duration-slow) var(--ease-out-expo);
+  --animate-slideLeft: slideLeft var(--duration-slow) var(--ease-out-expo);
+  --animate-slideRight: slideRight var(--duration-slow) var(--ease-out-expo);
+  --animate-scaleIn: scaleIn var(--duration-normal) var(--ease-out-expo);
+  --animate-float: float 3s ease-in-out infinite;
+}
+
+/* ========================================
+   Base Styles
+   ======================================== */
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 body {
-  background: var(--background);
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  transition: background-color var(--duration-normal) var(--ease-in-out-smooth),
+              color var(--duration-normal) var(--ease-in-out-smooth);
+}
+
+/* ========================================
+   Custom Scrollbar - Apple Style
+   ======================================== */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--apple-gray-300);
+  border-radius: 4px;
+  transition: background var(--duration-fast) var(--ease-in-out-smooth);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--apple-gray-400);
+}
+
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-thumb {
+    background: var(--apple-gray-700);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--apple-gray-600);
+  }
+}
+
+/* ========================================
+   Glassmorphism
+   ======================================== */
+
+.glass {
+  background: var(--glass-background);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.glass-sm {
+  background: var(--glass-background);
+  backdrop-filter: blur(8px) saturate(160%);
+  -webkit-backdrop-filter: blur(8px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-md);
+}
+
+.glass-lg {
+  background: var(--glass-background);
+  backdrop-filter: blur(16px) saturate(200%);
+  -webkit-backdrop-filter: blur(16px) saturate(200%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-xl);
+}
+
+/* ========================================
+   Animation Keyframes
+   ======================================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideLeft {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideRight {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* ========================================
+   Utility Classes - Apple Inspired
+   ======================================== */
+
+.animate-fadeIn {
+  animation: fadeIn var(--duration-slow) var(--ease-out-expo);
+}
+
+.animate-slideUp {
+  animation: slideUp var(--duration-slow) var(--ease-out-expo);
+}
+
+.animate-slideDown {
+  animation: slideDown var(--duration-slow) var(--ease-out-expo);
+}
+
+.animate-slideLeft {
+  animation: slideLeft var(--duration-slow) var(--ease-out-expo);
+}
+
+.animate-slideRight {
+  animation: slideRight var(--duration-slow) var(--ease-out-expo);
+}
+
+.animate-scaleIn {
+  animation: scaleIn var(--duration-normal) var(--ease-out-expo);
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Transition Utilities */
+.transition-smooth {
+  transition: all var(--duration-normal) var(--ease-in-out-smooth);
+}
+
+.transition-expo {
+  transition: all var(--duration-normal) var(--ease-out-expo);
+}
+
+/* Focus Styles - Minimal and Elegant */
+.focus-ring {
+  outline: none;
+  transition: box-shadow var(--duration-fast) var(--ease-in-out-smooth);
+}
+
+.focus-ring:focus-visible {
+  box-shadow: 0 0 0 3px var(--accent-light),
+              0 0 0 4px var(--accent);
+}
+
+/* Text Gradients - Subtle Elegance */
+.text-gradient {
+  background: linear-gradient(135deg, var(--agri-green-600), var(--agri-green-400));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-dark {
+  background: linear-gradient(135deg, var(--foreground), var(--apple-gray-500));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Buttons - Minimalist */
+.btn-primary {
+  background: var(--accent);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-lg);
+  font-weight: 500;
+  transition: all var(--duration-normal) var(--ease-out-expo);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-xs);
+}
+
+.btn-secondary {
+  background: var(--surface);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-lg);
+  font-weight: 500;
+  border: 1px solid var(--border);
+  transition: all var(--duration-normal) var(--ease-out-expo);
+}
+
+.btn-secondary:hover {
+  background: var(--surface-elevated);
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+
+/* Cards - Clean and Elevated */
+.card {
+  background: var(--surface-elevated);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--duration-normal) var(--ease-out-expo);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+/* Surface Hierarchy */
+.surface-base {
+  background: var(--background);
+}
+
+.surface-raised {
+  background: var(--surface);
+}
+
+.surface-elevated {
+  background: var(--surface-elevated);
+  box-shadow: var(--shadow-md);
+}
+
+/* Typography Scale */
+.text-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.text-body {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* Dividers - Subtle */
+.divider {
+  height: 1px;
+  background: var(--border);
+  border: none;
+}
+
+.divider-vertical {
+  width: 1px;
+  background: var(--border);
+  border: none;
 }
