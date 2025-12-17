@@ -576,3 +576,131 @@ body {
   background: var(--border);
   border: none;
 }
+
+/* ========================================
+   Mobile Utilities
+   ======================================== */
+
+/* Hide scrollbar while keeping functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Safe area insets for iOS */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0);
+}
+
+/* Touch optimizations */
+.touch-manipulation {
+  touch-action: manipulation;
+}
+
+/* Prevent text selection on interactive elements */
+.select-none-children * {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ========================================
+   Enhanced Animations
+   ======================================== */
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes bounce-subtle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s linear infinite;
+  background: linear-gradient(
+    90deg,
+    var(--apple-gray-100) 0%,
+    var(--apple-gray-50) 50%,
+    var(--apple-gray-100) 100%
+  );
+  background-size: 200% 100%;
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+.animate-bounce-subtle {
+  animation: bounce-subtle 2s ease-in-out infinite;
+}
+
+/* ========================================
+   Stagger Animation Utilities
+   ======================================== */
+
+.stagger-children > * {
+  animation: slideUp var(--duration-slow) var(--ease-out-expo) forwards;
+  opacity: 0;
+}
+
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 50ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 100ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 150ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 200ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 250ms; }
+.stagger-children > *:nth-child(7) { animation-delay: 300ms; }
+.stagger-children > *:nth-child(8) { animation-delay: 350ms; }
+
+/* ========================================
+   Interactive Feedback
+   ======================================== */
+
+.tap-highlight {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.active-scale:active {
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
+}
+
+.active-opacity:active {
+  opacity: 0.8;
+}
+
+/* Haptic-like visual feedback */
+.haptic-feedback {
+  transition: transform 0.15s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.haptic-feedback:active {
+  transform: scale(0.95);
+}
