@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import {
   Sheet,
@@ -39,11 +39,27 @@ const navigation = [
 export function MobileNav() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Don't render on desktop
+  if (!isMobile) {
+    return null;
+  }
 
   return (
     <>
-      {/* Fixed Header */}
-      <header className="fixed top-0 left-0 right-0 z-40 glass border-b border-white/20">
+      {/* Fixed Header - Mobile Only */}
+      <header className="fixed top-0 left-0 right-0 z-40 bg-white/80 backdrop-blur-xl border-b border-gray-200/50">
         <div className="flex h-16 items-center justify-between px-4">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3">
@@ -84,7 +100,7 @@ export function MobileNav() {
 
               {/* Navigation */}
               <nav className="flex flex-col gap-1 p-4">
-                {navigation.map((item, index) => {
+                {navigation.map((item) => {
                   const isActive = pathname === item.href;
                   return (
                     <Link
@@ -97,9 +113,6 @@ export function MobileNav() {
                           ? "bg-green-50 text-green-700 shadow-sm"
                           : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                       )}
-                      style={{
-                        animationDelay: `${index * 30}ms`,
-                      }}
                     >
                       <item.icon
                         className={cn(

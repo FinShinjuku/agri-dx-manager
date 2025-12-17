@@ -1,40 +1,54 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { format, subDays, startOfMonth, endOfMonth } from "date-fns";
 import { ja } from "date-fns/locale";
 import { Download, TrendingUp, TrendingDown, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { products, getSalesSummary } from "@/lib/data/mock-data";
 
-// 売上データ生成
+// 売上データ生成 (固定値でHydrationエラー回避)
+const salesAmounts = [
+  295000, 310000, 285000, 175000, 165000, 305000, 298000, 288000, 315000, 302000,
+  290000, 170000, 160000, 295000, 308000, 278000, 320000, 295000, 285000, 180000,
+  168000, 298000, 312000, 295000, 305000, 288000, 292000, 175000, 162000, 308000, 295000
+];
+const salesBoxes = [
+  345, 360, 332, 195, 185, 355, 348, 338, 365, 352,
+  340, 190, 180, 345, 358, 328, 370, 345, 335, 200,
+  188, 348, 362, 345, 355, 338, 342, 195, 182, 358, 345
+];
+
 const generateSalesData = () => {
   const data = [];
   for (let i = 30; i >= 0; i--) {
     const date = subDays(new Date(), i);
-    const isWeekend = date.getDay() === 0 || date.getDay() === 6;
-    const baseAmount = isWeekend ? 150000 : 280000;
+    const idx = 30 - i;
     data.push({
       date,
-      amount: baseAmount + Math.floor(Math.random() * 50000),
-      boxes: isWeekend ? 180 + Math.floor(Math.random() * 50) : 320 + Math.floor(Math.random() * 80),
+      amount: salesAmounts[idx],
+      boxes: salesBoxes[idx],
     });
   }
   return data;
 };
 
-// 商品別売上
-const productSales = products.map((p) => ({
+// 商品別売上 (固定値)
+const productSales = products.map((p, i) => ({
   ...p,
-  monthlySales: Math.floor(Math.random() * 500000) + 200000,
-  monthlyQuantity: Math.floor(Math.random() * 5000) + 2000,
-  growth: Math.floor(Math.random() * 30) - 10,
+  monthlySales: [450000, 380000, 320000, 280000][i] || 350000,
+  monthlyQuantity: [4500, 3800, 3200, 2800][i] || 3500,
+  growth: [8, -3, 12, 5][i] || 0,
 }));
 
 export default function ReportsPage() {
-  const today = format(new Date(), "M月d日(E)", { locale: ja });
-  const salesData = generateSalesData();
+  const [today, setToday] = useState("");
+  const [salesData] = useState(() => generateSalesData());
   const sales = getSalesSummary();
+
+  useEffect(() => {
+    setToday(format(new Date(), "M月d日(E)", { locale: ja }));
+  }, []);
 
   const [period, setPeriod] = useState<"week" | "month" | "year">("month");
 
@@ -200,8 +214,9 @@ export default function ReportsPage() {
       <div className="rounded-xl bg-red-50 border border-red-200 p-6">
         <h2 className="text-lg font-semibold text-red-700 mb-4">廃棄ロス (今月)</h2>
         <div className="grid grid-cols-4 gap-4">
-          {products.map((product) => {
-            const lossAmount = Math.floor(Math.random() * 20000) + 5000;
+          {products.map((product, i) => {
+            const lossAmounts = [15000, 12000, 18000, 8000];
+            const lossAmount = lossAmounts[i] || 10000;
             const lossQuantity = Math.floor(lossAmount / product.unitPrice);
             return (
               <div key={product.id} className="text-center">
@@ -217,9 +232,7 @@ export default function ReportsPage() {
         <div className="mt-4 pt-4 border-t border-red-200 text-center">
           <p className="text-red-600">総廃棄ロス</p>
           <p className="text-3xl font-bold text-red-700">
-            ¥{products
-              .reduce(() => Math.floor(Math.random() * 20000) + 5000, 0)
-              .toLocaleString()}
+            ¥{(15000 + 12000 + 18000 + 8000).toLocaleString()}
           </p>
         </div>
       </div>

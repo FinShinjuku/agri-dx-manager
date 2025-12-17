@@ -1,13 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { format, addDays, subDays } from "date-fns";
 import { ja } from "date-fns/locale";
 import { ChevronLeft, ChevronRight, Sprout } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { products } from "@/lib/data/mock-data";
 
-// 生産計画データを生成
+// 生産計画データを生成 (固定シードでHydrationエラー回避)
+const seededValues = [
+  [35, 42, 38, 45], [28, 35, 32, 40], [40, 48, 44, 52], [32, 38, 35, 42],
+  [15, 18, 16, 20], [12, 15, 14, 17], [38, 45, 42, 50], [30, 36, 33, 40],
+  [42, 50, 46, 55], [35, 42, 38, 48], [18, 22, 20, 25], [14, 17, 16, 20],
+  [36, 43, 40, 47], [28, 34, 31, 38]
+];
+
 const generateProductionPlan = (startDate: Date) => {
   const days = [];
   for (let i = 0; i < 14; i++) {
@@ -15,10 +22,10 @@ const generateProductionPlan = (startDate: Date) => {
     const isWeekend = date.getDay() === 0 || date.getDay() === 6;
     days.push({
       date,
-      productions: products.map((p) => ({
+      productions: products.map((p, pIdx) => ({
         productId: p.id,
         productName: p.name,
-        trays: isWeekend ? Math.floor(Math.random() * 20) + 10 : Math.floor(Math.random() * 40) + 30,
+        trays: isWeekend ? seededValues[i][pIdx] - 20 : seededValues[i][pIdx],
         status: i < 2 ? "seeded" : i < 5 ? "growing" : "planned",
       })),
     });
@@ -34,19 +41,36 @@ const statusConfig = {
 };
 
 export default function ProductionPage() {
-  const [startDate, setStartDate] = useState(subDays(new Date(), 2));
-  const productionPlan = generateProductionPlan(startDate);
+  const [today, setToday] = useState("");
+  const [startDate, setStartDate] = useState(() => subDays(new Date(), 2));
+  const [productionPlan, setProductionPlan] = useState(() => generateProductionPlan(subDays(new Date(), 2)));
 
-  const goToPreviousWeek = () => setStartDate((d) => subDays(d, 7));
-  const goToNextWeek = () => setStartDate((d) => addDays(d, 7));
-  const goToToday = () => setStartDate(subDays(new Date(), 2));
+  useEffect(() => {
+    setToday(format(new Date(), "M月d日(E)", { locale: ja }));
+  }, []);
+
+  const goToPreviousWeek = () => {
+    const newDate = subDays(startDate, 7);
+    setStartDate(newDate);
+    setProductionPlan(generateProductionPlan(newDate));
+  };
+  const goToNextWeek = () => {
+    const newDate = addDays(startDate, 7);
+    setStartDate(newDate);
+    setProductionPlan(generateProductionPlan(newDate));
+  };
+  const goToToday = () => {
+    const newDate = subDays(new Date(), 2);
+    setStartDate(newDate);
+    setProductionPlan(generateProductionPlan(newDate));
+  };
 
   return (
     <div className="space-y-8">
       {/* ヘッダー */}
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-gray-500">{format(new Date(), "M月d日(E)", { locale: ja })}</p>
+          <p className="text-gray-500">{today}</p>
           <h1 className="text-3xl font-bold text-gray-900">生産計画</h1>
         </div>
         <div className="flex items-center gap-2">

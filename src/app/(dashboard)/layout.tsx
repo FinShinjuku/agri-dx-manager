@@ -8,15 +8,11 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Desktop Sidebar */}
-      <div className="hidden lg:block">
-        <Sidebar />
-      </div>
+      {/* Desktop Sidebar - visibility controlled within component */}
+      <Sidebar />
 
       {/* Mobile Navigation */}
-      <div className="lg:hidden">
-        <MobileNav />
-      </div>
+      <MobileNav />
 
       {/* Main Content */}
       <main className="lg:pl-64">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
 import { Plus, Search, Phone, Mail, MapPin, Edit, Trash2 } from "lucide-react";
@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { customers } from "@/lib/data/mock-data";
 
-// 拡張した顧客データ
+// 拡張した顧客データ (固定値でHydrationエラー回避)
 const customersData = customers.map((c, i) => ({
   ...c,
   contactName: ["佐藤", "田中", "山田", "鈴木", "高橋", "伊藤", "渡辺", "中村", "小林", "加藤"][i] + "様",
@@ -16,12 +16,15 @@ const customersData = customers.map((c, i) => ({
   email: `contact${i + 1}@example.com`,
   address: `新潟市中央区〇〇町${i + 1}-${i + 1}`,
   lastOrder: new Date(2024, 11, 15 - i),
-  monthlyAvg: 50000 + Math.floor(Math.random() * 100000),
+  monthlyAvg: [85000, 120000, 95000, 78000, 145000, 110000, 92000, 135000, 88000, 105000][i] || 100000,
   isActive: true,
 }));
 
 export default function CustomersPage() {
-  const today = format(new Date(), "M月d日(E)", { locale: ja });
+  const [today, setToday] = useState("");
+  useEffect(() => {
+    setToday(format(new Date(), "M月d日(E)", { locale: ja }));
+  }, []);
   const [search, setSearch] = useState("");
   const [selectedCustomer, setSelectedCustomer] = useState<string | null>(null);
 
