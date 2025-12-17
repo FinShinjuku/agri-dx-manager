@@ -66,40 +66,40 @@ export default function ProductionPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
       {/* ヘッダー */}
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-gray-500">{today}</p>
-          <h1 className="text-3xl font-bold text-gray-900">生産計画</h1>
+      <header className="space-y-1">
+        <p className="text-sm font-medium text-gray-400">{today}</p>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">生産計画</h1>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={goToPreviousWeek} className="flex-1 sm:flex-none">
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="sm" onClick={goToToday} className="flex-1 sm:flex-none">
+              今日
+            </Button>
+            <Button variant="outline" size="sm" onClick={goToNextWeek} className="flex-1 sm:flex-none">
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={goToPreviousWeek}>
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <Button variant="outline" size="sm" onClick={goToToday}>
-            今日
-          </Button>
-          <Button variant="outline" size="sm" onClick={goToNextWeek}>
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
+      </header>
 
       {/* 凡例 */}
-      <div className="flex items-center gap-4">
+      <div className="flex flex-wrap items-center gap-3 sm:gap-4">
         {Object.entries(statusConfig).map(([key, config]) => (
           <div key={key} className="flex items-center gap-2">
             <div className={`h-3 w-3 rounded ${config.bg}`} />
-            <span className="text-sm text-gray-600">{config.label}</span>
+            <span className="text-xs sm:text-sm text-gray-600">{config.label}</span>
           </div>
         ))}
       </div>
 
       {/* カレンダー */}
-      <div className="rounded-xl bg-white border border-gray-200 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[900px]">
+      <div className="rounded-2xl bg-white border border-gray-100 overflow-hidden shadow-sm">
+        <div className="overflow-x-auto scrollbar-hide">
+          <table className="w-full min-w-[800px]">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-200">
                 <th className="p-3 text-left font-semibold text-gray-700 w-32">品目</th>
@@ -179,25 +179,28 @@ export default function ProductionPage() {
       </div>
 
       {/* 週間サマリー */}
-      <div className="grid grid-cols-4 gap-4">
-        {products.map((product) => {
-          const weekTotal = productionPlan
-            .slice(0, 7)
-            .reduce((sum, day) => {
-              const p = day.productions.find((pr) => pr.productId === product.id);
-              return sum + (p?.trays || 0);
-            }, 0);
-          return (
-            <div
-              key={product.id}
-              className="rounded-xl bg-white border border-gray-200 p-6 text-center"
-            >
-              <p className="text-gray-600 mb-1">{product.name}</p>
-              <p className="text-4xl font-bold text-gray-900">{weekTotal}</p>
-              <p className="text-gray-400 text-sm">今週のトレイ数</p>
-            </div>
-          );
-        })}
+      <div className="space-y-3">
+        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">今週の生産計画</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+          {products.map((product) => {
+            const weekTotal = productionPlan
+              .slice(0, 7)
+              .reduce((sum, day) => {
+                const p = day.productions.find((pr) => pr.productId === product.id);
+                return sum + (p?.trays || 0);
+              }, 0);
+            return (
+              <div
+                key={product.id}
+                className="rounded-2xl bg-white border border-gray-100 p-4 sm:p-6 text-center shadow-sm"
+              >
+                <p className="text-xs sm:text-sm text-gray-600 mb-1">{product.name}</p>
+                <p className="text-3xl sm:text-4xl font-bold text-gray-900 tabular-nums">{weekTotal}</p>
+                <p className="text-xs text-gray-400">トレイ</p>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

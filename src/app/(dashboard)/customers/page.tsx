@@ -36,18 +36,18 @@ export default function CustomersPage() {
   );
 
   return (
-    <div className="space-y-8">
+    <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
       {/* ヘッダー */}
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-gray-500">{today}</p>
-          <h1 className="text-3xl font-bold text-gray-900">納入先管理</h1>
+      <header className="space-y-1">
+        <p className="text-sm font-medium text-gray-400">{today}</p>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">納入先管理</h1>
+          <Button className="bg-emerald-600 hover:bg-emerald-700 w-full sm:w-auto">
+            <Plus className="h-4 w-4 mr-2" />
+            新規登録
+          </Button>
         </div>
-        <Button className="bg-green-600 hover:bg-green-700">
-          <Plus className="h-4 w-4 mr-2" />
-          新規登録
-        </Button>
-      </div>
+      </header>
 
       {/* 検索 */}
       <div className="relative">
@@ -56,27 +56,27 @@ export default function CustomersPage() {
           placeholder="納入先名、担当者名、コードで検索..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="pl-10 h-12"
+          className="pl-10 h-11 sm:h-12"
         />
       </div>
 
       {/* サマリー */}
-      <div className="grid grid-cols-3 gap-4">
-        <div className="rounded-xl bg-white border border-gray-200 p-6 text-center">
-          <p className="text-gray-500 mb-1">登録納入先</p>
-          <p className="text-5xl font-bold text-gray-900">{customersData.length}</p>
-          <p className="text-gray-400">件</p>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+        <div className="rounded-2xl bg-white border border-gray-100 p-4 sm:p-6 text-center shadow-sm">
+          <p className="text-xs sm:text-sm text-gray-500 mb-1">登録納入先</p>
+          <p className="text-3xl sm:text-5xl font-bold text-gray-900 tabular-nums">{customersData.length}</p>
+          <p className="text-xs sm:text-sm text-gray-400">件</p>
         </div>
-        <div className="rounded-xl bg-green-50 border border-green-200 p-6 text-center">
-          <p className="text-green-600 mb-1">取引中</p>
-          <p className="text-5xl font-bold text-green-700">
+        <div className="rounded-2xl bg-emerald-50 border border-emerald-200 p-4 sm:p-6 text-center shadow-sm">
+          <p className="text-xs sm:text-sm text-emerald-600 mb-1">取引中</p>
+          <p className="text-3xl sm:text-5xl font-bold text-emerald-700 tabular-nums">
             {customersData.filter((c) => c.isActive).length}
           </p>
-          <p className="text-green-500">件</p>
+          <p className="text-xs sm:text-sm text-emerald-500">件</p>
         </div>
-        <div className="rounded-xl bg-white border border-gray-200 p-6 text-center">
-          <p className="text-gray-500 mb-1">月間平均売上</p>
-          <p className="text-3xl font-bold text-gray-900">
+        <div className="rounded-2xl bg-white border border-gray-100 p-4 sm:p-6 text-center shadow-sm">
+          <p className="text-xs sm:text-sm text-gray-500 mb-1">月間平均売上</p>
+          <p className="text-2xl sm:text-3xl font-bold text-gray-900 tabular-nums">
             ¥{Math.round(
               customersData.reduce((sum, c) => sum + c.monthlyAvg, 0) / customersData.length
             ).toLocaleString()}
@@ -86,20 +86,46 @@ export default function CustomersPage() {
 
       {/* 顧客リスト */}
       <div className="space-y-3">
+        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">納入先一覧</h2>
         {filteredCustomers.map((customer) => (
           <div
             key={customer.id}
-            className="rounded-xl bg-white border border-gray-200 overflow-hidden"
+            className="rounded-2xl bg-white border border-gray-100 overflow-hidden shadow-sm"
           >
             <div
-              className="p-4 cursor-pointer hover:bg-gray-50"
+              className="p-4 cursor-pointer hover:bg-gray-50 active:bg-gray-100"
               onClick={() =>
                 setSelectedCustomer(
                   selectedCustomer === customer.id ? null : customer.id
                 )
               }
             >
-              <div className="flex items-center justify-between">
+              {/* Mobile Layout */}
+              <div className="sm:hidden">
+                <div className="flex items-start justify-between mb-2">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap mb-1">
+                      <h3 className="font-semibold text-gray-900">{customer.name}</h3>
+                      {customer.isActive && (
+                        <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-xs">
+                          取引中
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs text-gray-400">{customer.code}</p>
+                  </div>
+                  <div className="text-right ml-3">
+                    <p className="text-lg font-bold text-gray-900 tabular-nums">
+                      ¥{customer.monthlyAvg.toLocaleString()}
+                    </p>
+                    <p className="text-xs text-gray-400">月間平均</p>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-500">{customer.contactName}</p>
+              </div>
+
+              {/* Desktop Layout */}
+              <div className="hidden sm:flex sm:items-center sm:justify-between">
                 <div>
                   <div className="flex items-center gap-3">
                     <span className="text-sm text-gray-400">{customer.code}</span>
@@ -107,7 +133,7 @@ export default function CustomersPage() {
                       {customer.name}
                     </h3>
                     {customer.isActive && (
-                      <span className="px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs">
+                      <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-xs">
                         取引中
                       </span>
                     )}
@@ -116,7 +142,7 @@ export default function CustomersPage() {
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-gray-500">月間平均</p>
-                  <p className="text-xl font-bold text-gray-900">
+                  <p className="text-xl font-bold text-gray-900 tabular-nums">
                     ¥{customer.monthlyAvg.toLocaleString()}
                   </p>
                 </div>
@@ -126,18 +152,18 @@ export default function CustomersPage() {
             {/* 詳細 */}
             {selectedCustomer === customer.id && (
               <div className="border-t border-gray-100 bg-gray-50 p-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-3">
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <Phone className="h-4 w-4" />
-                      <span>{customer.phone}</span>
+                    <div className="flex items-center gap-2 text-gray-600 text-sm">
+                      <Phone className="h-4 w-4 flex-shrink-0" />
+                      <span className="truncate">{customer.phone}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <Mail className="h-4 w-4" />
-                      <span>{customer.email}</span>
+                    <div className="flex items-center gap-2 text-gray-600 text-sm">
+                      <Mail className="h-4 w-4 flex-shrink-0" />
+                      <span className="truncate">{customer.email}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <MapPin className="h-4 w-4" />
+                    <div className="flex items-start gap-2 text-gray-600 text-sm">
+                      <MapPin className="h-4 w-4 flex-shrink-0 mt-0.5" />
                       <span>{customer.address}</span>
                     </div>
                   </div>
@@ -147,15 +173,15 @@ export default function CustomersPage() {
                     </p>
                   </div>
                 </div>
-                <div className="flex justify-end gap-2 mt-4">
-                  <Button size="sm" variant="outline">
+                <div className="flex flex-col sm:flex-row sm:justify-end gap-2 mt-4">
+                  <Button size="sm" variant="outline" className="w-full sm:w-auto">
                     <Edit className="h-4 w-4 mr-1" />
                     編集
                   </Button>
                   <Button
                     size="sm"
                     variant="outline"
-                    className="text-red-600 border-red-300 hover:bg-red-50"
+                    className="text-red-600 border-red-300 hover:bg-red-50 w-full sm:w-auto"
                   >
                     <Trash2 className="h-4 w-4 mr-1" />
                     削除
